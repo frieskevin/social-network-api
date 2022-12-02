@@ -66,12 +66,20 @@ const updateThoughtById = ({ params, body }, res) => {
 };
 
 const createReaction = ({ params, body }, res) => {
-    const newReaction = Thought.findOneAndUpdate(
+    Thought.findOneAndUpdate(
         { _id: params.id },
         { $push: { reactions: body } },
         { new: true }
-    );
-    res.json(newReaction);
+    )
+        .then(dbData => {
+            if (!dbData) {
+                res.status(404).json({ message: 'No thought found with this id!' });
+                return;
+            }
+            res.json(dbData);
+        })
+        .catch(err => res.json(err));
+
 };
 
 module.exports = { getAllThoughts, getThoughtById, createThought, deleteThoughtById, updateThoughtById, createReaction };
