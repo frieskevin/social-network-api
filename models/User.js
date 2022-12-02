@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
-const dateFormat = require('../utils/dateFormat');
 
+//creates a schema for the user with thoughts and friends nested inside
 const UserSchema = new Schema ({
     username: {
         type: String,
@@ -31,10 +31,13 @@ const UserSchema = new Schema ({
     id: false
 });
 
+//creates a way to get the amount of friends a user has
 UserSchema.virtual('friendCount').get(function() {
     return this.friends.length;
 });
 
+//creates the user model
 const User = model('User', UserSchema);
 
+//exports the user model
 module.exports = User;

@@ -1,5 +1,7 @@
+// imports Thought and User schema
 const { Thought, User } = require('../models');
 
+// gets all thoughts
 const getAllThoughts = async (req, res) => {
     try {
         const thoughts = await Thought.find();
@@ -9,6 +11,7 @@ const getAllThoughts = async (req, res) => {
     }
 };
 
+//gets a specific thought by id
 const getThoughtById = ({ params }, res) => {
     Thought.findOne({ _id: params.id })
             .then(dbThoughtData => {
@@ -25,6 +28,7 @@ const getThoughtById = ({ params }, res) => {
 
 };
 
+// creates a thought
 const createThought = async (req, res) => {
     try {
         const newThought = await Thought.create({
@@ -41,6 +45,7 @@ const createThought = async (req, res) => {
     }
 };
 
+// deletes a thought by id
 const deleteThoughtById = ({ params }, res) => {
     Thought.findOneAndDelete({ _id: params.id })
         .then(dbThoughtData => {
@@ -53,6 +58,7 @@ const deleteThoughtById = ({ params }, res) => {
         .catch(err => res.status(400).json(err));
 };
 
+// updates a thought by its id
 const updateThoughtById = ({ params, body }, res) => {
     Thought.findOneAndUpdate({ _id: params.id }, body, { new: true, runValidators: true })
         .then(dbThoughtData => {
@@ -65,6 +71,7 @@ const updateThoughtById = ({ params, body }, res) => {
         .catch(err => res.status(400).json(err));
 };
 
+// create a reaction to a thought
 const createReaction = ({ params, body }, res) => {
     Thought.findOneAndUpdate(
         { _id: params.id },
@@ -82,6 +89,7 @@ const createReaction = ({ params, body }, res) => {
 
 };
 
+// delete a reaction to a thought by its id and the thoughts id
 const deleteReaction = ({ params }, res) => {
     Thought.findOneAndUpdate(
         { _id: params.id },

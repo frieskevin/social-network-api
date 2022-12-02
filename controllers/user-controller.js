@@ -1,6 +1,7 @@
+// imports the user schema
 const { User } = require('../models');
 
-
+// get all the users in the database
 const getAllUsers = async (req, res) => {
     try {
         const users = await User.find();
@@ -10,6 +11,7 @@ const getAllUsers = async (req, res) => {
     }
 };
 
+// gets a user by its id
 const getUserById = ({ params }, res) => {
     User.findOne({ _id: params.id })
         .then(dbUserData => {
@@ -25,6 +27,7 @@ const getUserById = ({ params }, res) => {
         });
 };
 
+//creates new user
 const createUser = async (req, res) => {
     try {
         const newUser = await User.create({
@@ -36,6 +39,7 @@ const createUser = async (req, res) => {
     }
 };
 
+// update a user by its id
 const updateUserById = ({ params, body }, res) => {
     User.findOneAndUpdate({ _id: params.id }, body, { new: true, runValidators: true })
         .then(dbUserData => {
@@ -48,6 +52,7 @@ const updateUserById = ({ params, body }, res) => {
         .catch(err => res.status(400).json(err));
 };
 
+// delete a user by its id
 const deleteUserById = ({ params }, res) => {
     User.findOneAndDelete({ _id: params.id })
         .then(dbUserData => {
@@ -60,6 +65,7 @@ const deleteUserById = ({ params }, res) => {
         .catch(err => res.status(400).json(err));
 };
 
+// add a friend nested in the user 
 const addFriend = ({ params }, res) => {
     User.findOneAndUpdate(
         { _id: params.id },
@@ -76,6 +82,7 @@ const addFriend = ({ params }, res) => {
         .catch(err => res.json(err));
 };
 
+// delete friend from user
 const deleteFriend = ({ params }, res) => {
     User.findOneAndUpdate(
         { _id: params.id },
@@ -86,4 +93,5 @@ const deleteFriend = ({ params }, res) => {
         .catch(err => res.json(err));
 };
 
+//exports all these functions so routes can use them
 module.exports = { getAllUsers, getUserById, createUser, updateUserById, deleteUserById, addFriend, deleteFriend };
