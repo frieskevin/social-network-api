@@ -21,19 +21,20 @@ const getThoughtById = ({ params }, res) => {
     .catch (error) 
 };
 
-const createThought = ({ body }, res) => {
-    Thought.create(body)
-        .then(({ _id }) => {
-            User.findOneAndUpdate(
-                { _id: body.userId },
-                { $push: { thoughts: _id } },
-                { new: true }
-            );
-        })
-        .then(dbComment => {
-            res.json(dbComment);
-        })
-        .catch(err => res.json(err));
+const createThought = async (req, res) => {
+    try {
+        const newThought = await Thought.create({
+            ...req.body,
+        });
+        const addThoughtToUser = await User.findOneAndUpdate(
+            { _id: req.body.userId },
+            { $push: { thoughts: newThought._id } },
+            { new: true}
+        );
+        res.json(newThought, addThoughtToUser);
+    } catch (error) {
+        
+    }
 };
 
 ///^^^ still need this one
