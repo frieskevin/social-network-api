@@ -36,6 +36,18 @@ const createThought = ({ body }, res) => {
         .catch(err => res.json(err));
 };
 
-const deleteThought
+///^^^ still need this one
 
-module.exports = { getAllThoughts, getThoughtById, createThought };
+const deleteThoughtById = ({ params }, res) => {
+    Thought.findOneAndDelete({ _id: params.id })
+        .then(dbThoughtData => {
+            if (!dbThoughtData) {
+                res.status(404).json({ message: 'No thought found with this id!' });
+                return;
+            }
+            res.json(dbThoughtData);
+        })
+        .catch(err => res.status(400).json(err));
+};
+
+module.exports = { getAllThoughts, getThoughtById, createThought, deleteThoughtById };
