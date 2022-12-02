@@ -77,15 +77,13 @@ const addFriend = ({ params }, res) => {
 };
 
 const deleteFriend = ({ params }, res) => {
-    
-}
+    User.findOneAndUpdate(
+        { _id: params.id },
+        { $pull: { friends: params.friendId } },
+        { new: true }
+    )
+        .then(dbUserData => res.json(dbUserData))
+        .catch(err => res.json(err));
+};
 
-// //still need: /api/users/:userId/friends/:friendId
-
-// POST to add a new friend to a user's friend list
-
-// DELETE to remove a friend from a user's friend list
-
-
-
-module.exports = { getAllUsers, getUserById, createUser, updateUserById, deleteUserById, addFriend };
+module.exports = { getAllUsers, getUserById, createUser, updateUserById, deleteUserById, addFriend, deleteFriend };
