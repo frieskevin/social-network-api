@@ -50,4 +50,16 @@ const deleteThoughtById = ({ params }, res) => {
         .catch(err => res.status(400).json(err));
 };
 
-module.exports = { getAllThoughts, getThoughtById, createThought, deleteThoughtById };
+const updateThoughtById = ({ params, body }, res) => {
+    Thought.findOneAndUpdate({ _id: params.id }, body, { new: true, runValidators: true })
+        .then(dbThoughtData => {
+            if (!dbThoughtData) {
+                res.status(404).json({ message: 'No thought found with this Id!' });
+                return;
+            }
+            res.json(dbToughtData);
+        })
+        .catch(err => res.status(400).json(err));
+};
+
+module.exports = { getAllThoughts, getThoughtById, createThought, deleteThoughtById, updateThoughtById };
