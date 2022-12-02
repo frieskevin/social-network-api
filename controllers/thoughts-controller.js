@@ -82,4 +82,14 @@ const createReaction = ({ params, body }, res) => {
 
 };
 
-module.exports = { getAllThoughts, getThoughtById, createThought, deleteThoughtById, updateThoughtById, createReaction };
+const deleteReaction = ({ params }, res) => {
+    Thought.findOneAndUpdate(
+        { _id: params.id },
+        { $pull: { reactions: { _id: params.reactionId } } },
+        { new: true }
+    )
+        .then(dbData => res.json(dbData))
+        .catch(err => res.json(err));
+};
+
+module.exports = { getAllThoughts, getThoughtById, createThought, deleteThoughtById, updateThoughtById, createReaction, deleteReaction };
