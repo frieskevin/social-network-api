@@ -16,9 +16,13 @@ const getThoughtById = ({ params }, res) => {
                     res.status(404).json({ message: 'No thought found with this id!' });
                     return;
                 }
-                res.json(dbUserData);
+                res.json(dbThoughtData);
             })
-    .catch (error) 
+            .catch(err => {
+                console.log(err);
+                res.status(400).json(err);
+            });
+
 };
 
 const createThought = async (req, res) => {
@@ -36,8 +40,6 @@ const createThought = async (req, res) => {
         
     }
 };
-
-///^^^ still need this one
 
 const deleteThoughtById = ({ params }, res) => {
     Thought.findOneAndDelete({ _id: params.id })
@@ -58,9 +60,18 @@ const updateThoughtById = ({ params, body }, res) => {
                 res.status(404).json({ message: 'No thought found with this Id!' });
                 return;
             }
-            res.json(dbToughtData);
+            res.json(dbThoughtData);
         })
         .catch(err => res.status(400).json(err));
 };
 
-module.exports = { getAllThoughts, getThoughtById, createThought, deleteThoughtById, updateThoughtById };
+const createReaction = ({ params, body }, res) => {
+    const newReaction = Thought.findOneAndUpdate(
+        { _id: params.id },
+        { $push: { reactions: body } },
+        { new: true }
+    );
+    res.json(newReaction);
+};
+
+module.exports = { getAllThoughts, getThoughtById, createThought, deleteThoughtById, updateThoughtById, createReaction };
